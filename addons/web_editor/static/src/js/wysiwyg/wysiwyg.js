@@ -162,6 +162,19 @@ var Wysiwyg = Widget.extend({
         return this._summernoteManager.saveCroppedImages($editable);
     },
     /**
+     * Removes cachebuster parameters from image urls.
+     *
+     * @public
+     */
+    removeCacheBusters: function ($editable) {
+        return $editable.find('[data-remove-cache-buster=true]').each((index, img) => {
+            const url = new URL(img.src);
+            url.searchParams.delete('cachebuster');
+            img.src = window.location.host === url.host ? url.pathname : url.href;
+            delete img.dataset.removeCacheBuster;
+        });
+    },
+    /**
      * @param {String} value
      * @param {Object} options
      * @param {Boolean} [options.notifyChange]
